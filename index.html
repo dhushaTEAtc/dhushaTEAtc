@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tissue Culture - TEA Project</title>
+    <meta name="description" content="Learn about advanced plant tissue culture technology used for enhancing tea plants.">
+    <meta name="keywords" content="tea tissue culture, plant tissue culture, Camellia sinensis, tea farming, plant propagation">
+    <meta name="author" content="Dhusha's Research Information">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#004d00">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: #009900;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+            z-index: 9999;
+        }
+
+        .cursor.hover {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 153, 0, 0.5);
+        }
+
+        .cursor.pointer {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 153, 0, 0.7);
+            cursor: pointer;
+        }
+
+        /* Light Trail Effect */
+        .light-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #009900;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #007700;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #009900;
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+
+        /* Sticky Navigation Bar */
+        nav {
+            background: linear-gradient(135deg, #004d00, #009900);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hero Section with 3D Parallax and Particles */
+        .hero {
+            background: url('images/hero-bg.jpg') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-top: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Content Sections with Gradient Backgrounds */
+        .content, .steps, .media-systems, .post-culture {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content:hover, .steps:hover, .media-systems:hover, .post-culture:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .steps .step, .media-systems .medium, .post-culture .phase {
+            margin-top: 30px;
+            padding: 25px;
+            background: #e6ffe6;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .steps .step:hover, .media-systems .medium:hover, .post-culture .phase:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .hover-img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .scrolling-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5733;
+            margin: 20px 0;
+            animation: scroll 10s infinite linear;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Animated Background for Key Points */
+        .animated-background {
+            background: linear-gradient(135deg, #ffcc00, #ff5733);
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Key Points and Critical Notes */
+        .important {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 5px solid #ffc107;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .critical {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-left: 5px solid #dc3545;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .large-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .step-title, .medium-title, .phase-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background: #555;
+        }
+
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+        }
+
+        .dark-mode nav {
+            background: linear-gradient(135deg, #002200, #006600);
+        }
+
+        .dark-mode .content, .dark-mode .steps, .dark-mode .media-systems, .dark-mode .post-culture {
+            background: linear-gradient(135deg, #333, #444);
+            color: #f4f4f4;
+        }
+
+        .dark-mode .steps .step, .dark-mode .media-systems .medium, .dark-mode .post-culture .phase {
+            background: #334433;
+        }
+
+        .dark-mode footer {
+            background: #222;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 10px;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .content, .steps, .media-systems, .post-culture {
+                padding: 15px;
+            }
+
+            .steps .step, .media-systems .medium, .post-culture .phase {
+                padding: 15px;
+            }
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #004d00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .preloader .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #009900;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Author Section */
+        .author-section {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .author-section h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .author-section p {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Light Trail Effect -->
+    <div class="light-trail"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar"></div>
+
+    <!-- Author Section -->
+    <section class="author-section">
+        <h2>About the Author</h2>
+        <p>G. Dhusha - PCTM/22/B2/046</p>
+        <p>Researcher of Plant Tissue Culture and Tea Plant Propagation</p>
+    </section>
+
+    <!-- Sticky Navigation Bar -->
+    <nav>
+        <h1>TEA Tissue Culture</h1>
+        <ul>
+            <li><a href="#content">What is Tissue Culture?</a></li>
+            <li><a href="#steps">Steps</a></li>
+            <li><a href="#media">Media Systems</a></li>
+            <li><a href="#post-culture">Post-Culture</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section with 3D Parallax and Particles -->
+    <section class="hero">
+        <div>
+            <h1>Welcome to TEA Tissue Culture</h1>
+            <p>Learn about advanced plant tissue culture technology used for enhancing tea plants.</p>
+        </div>
+    </section>
+
+    <!-- Content Sections -->
+    <section id="content" class="content">
+        <h2 class="large-text">What is Tissue Culture?</h2>
+        <p>Tissue culture is a cutting-edge scientific method used for the regeneration of plants, particularly tea plants, in a controlled laboratory environment. Through this method, small pieces of tissue from a plant—known as <span class="highlight">explants</span>—are cultured in a sterile, nutrient-rich medium to encourage rapid cell division and growth. This process can be used to propagate high-yielding, disease-resistant, and genetically uniform tea plants.</p>
+
+        <p class="animated-background">The primary advantage of tissue culture in tea plant production lies in its ability to rapidly multiply genetically identical plants that are free from diseases, pests, and other environmental factors. This ensures higher quality, more resilient tea crops. In tea plantations, this technology has become indispensable, enabling growers to meet the ever-increasing global demand for tea while maintaining consistency and quality.</p>
+
+        <img src="images/tissue-culture.jpg" alt="Tissue Culture Process" class="hover-img" loading="lazy">
+    </section>
+
+    <!-- Steps Section -->
+    <section id="steps" class="steps">
+        <h2 class="large-text">Detailed Steps in Tea Tissue Culture</h2>
+        <div class="step">
+            <h3 class="step-title">1. Selection of Explants</h3>
+            <p>The initial step involves selecting healthy, disease-free plant tissues to serve as explants. These tissues could be from the <span class="highlight">shoot tip, leaf, or nodal segments</span> of the tea plant. The selection process is crucial because it determines the quality and success rate of the tissue culture. The explants are then cut into small pieces to prepare them for sterilization and culture initiation.</p>
+            <div class="important">Key Point: Always choose explants from healthy, disease-free mother plants to ensure optimal growth.</div>
+            <img src="images/explants.jpg" alt="Explants Selection" class="hover-img" loading="lazy">
+        </div>
+        <div class="step">
+            <h3 class="step-title">2. Surface Sterilization</h3>
+            <p>Surface sterilization is essential to eliminate any microbial contamination from the explants. This step typically involves using a disinfectant, such as <span class="highlight">70% ethanol or 0.1% sodium hypochlorite</span>, to cleanse the explants. The surface sterilization process ensures that no bacteria, fungi, or other pathogens are present that could affect the culture's growth and development. This step must be carried out with precision to prevent tissue damage.</p>
+            <div class="critical">Critical: Over-sterilization can damage explants, while under-sterilization can lead to contamination.</div>
+            <img src="images/sterilization.jpg" alt="Surface Sterilization" class="hover-img" loading="lazy">
+        </div>
+        <div class="step">
+            <h3 class="step-title">3. Initiation of Culture</h3>
+            <p>Once sterilized, the explants are placed in culture vessels containing nutrient media that support their growth. This nutrient medium typically contains a variety of essential minerals, vitamins, and plant growth regulators that promote cell division and differentiation. The explants undergo rapid cellular growth, forming <span class="highlight">calluses</span>, which eventually differentiate into shoots and roots. The proper hormonal balance is critical in this step to encourage desired plant growth.</p>
+            <div class="important">Key Point: Use Murashige and Skoog (MS) medium for optimal growth.</div>
+            <img src="images/culture-initiation.jpg" alt="Culture Initiation" class="hover-img" loading="lazy">
+        </div>
+        <div class="step">
+            <h3 class="step-title">4. Hardening & Acclimatization</h3>
+            <p>After the plantlets have developed sufficiently, they are removed from the culture medium and transferred to a greenhouse environment. Here, they undergo hardening, a process that helps them adjust to real-world conditions. This stage involves gradually reducing humidity levels while increasing exposure to natural light. The plantlets slowly acclimatize to the outdoor environment, which prepares them for successful transplantation into the field.</p>
+            <div class="critical">Critical: Gradual acclimatization is essential to prevent shock and ensure survival.</div>
+            <img src="images/hardening.jpg" alt="Hardening & Acclimatization" class="hover-img" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Media Systems Section -->
+    <section id="media" class="media-systems">
+        <h2 class="large-text">Media Systems for Tea Tissue Culture</h2>
+        <div class="medium">
+            <h3 class="medium-title">1. Murashige and Skoog (MS) Medium</h3>
+            <ul>
+                <li>Most widely used for tea tissue culture.</li>
+                <li>Contains macronutrients, micronutrients, vitamins, and organic supplements.</li>
+            </ul>
+        </div>
+        <div class="medium">
+            <h3 class="medium-title">2. Gamborg’s B5 Medium</h3>
+            <ul>
+                <li>Suitable for root development and callus induction.</li>
+            </ul>
+        </div>
+        <div class="medium">
+            <h3 class="medium-title">3. Woody Plant Medium (WPM)</h3>
+            <ul>
+                <li>Specifically designed for woody plants like tea, promoting better shoot growth.</li>
+            </ul>
+        </div>
+        <div class="medium">
+            <h3 class="medium-title">4. Growth Regulators</h3>
+            <ul>
+                <li><span class="highlight">Auxins</span>: IBA, IAA, and NAA (for root induction).</li>
+                <li><span class="highlight">Cytokinins</span>: BAP, Kinetin, and Zeatin (for shoot multiplication).</li>
+                <li><span class="highlight">Gibberellins (GA3)</span>: Enhances elongation of shoots.</li>
+            </ul>
+        </div>
+        <div class="medium">
+            <h3 class="medium-title">5. Carbon Source</h3>
+            <ul>
+                <li>Sucrose (3–5%) is commonly added as an energy source.</li>
+            </ul>
+        </div>
+        <div class="medium">
+            <h3 class="medium-title">6. Gelling Agents</h3>
+            <ul>
+                <li>Agar or Gelrite is used to solidify the medium.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Post-Culture Section -->
+    <section id="post-culture" class="post-culture">
+        <h2 class="large-text">Post-Culture Process</h2>
+        <div class="phase">
+            <h3 class="phase-title">Steps for Acclimatization</h3>
+            <ol>
+                <li><span class="highlight">Remove from Culture</span> – Wash off agar from the roots.</li>
+                <li><span class="highlight">Transfer to Trays</span> – Plant in sterile medium (coco peat/vermiculite) in small pots.</li>
+                <li><span class="highlight">High Humidity Phase</span> – Keep in a greenhouse/mist chamber with 80–90% humidity.</li>
+                <li><span class="highlight">Gradual Hardening</span> – Slowly reduce humidity and increase light exposure over 2–4 weeks.</li>
+                <li><span class="highlight">Move to Nursery Bags</span> – Transfer to a shade net area with nutrient-rich soil.</li>
+                <li><span class="highlight">Final Field Transplant</span> – Plant in the field once roots and shoots are well developed.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Dhusha's Research Information | All Rights Reserved</p>
+        <div class="scrolling-text">Tissue culture: A vital technique in modern agriculture!</div>
+    </footer>
+
+    <!-- Dark Mode Toggle Button -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // Dark Mode Toggle Function
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggleButton = document.querySelector('.dark-mode-toggle');
+            if (document.body.classList.contains('dark-mode')) {
+                toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                toggleButton.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.querySelector('.preloader');
+            preloader.classList.add('hide');
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollProgress = (scrollTop / scrollHeight) * 100;
+            document.querySelector('.progress-bar').style.width = scrollProgress + '%';
+        });
+
+        // Smooth Scroll-to-Section Animation
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Custom Cursor and Light Trail
+        const cursor = document.querySelector('.cursor');
+        const lightTrail = document.querySelector('.light-trail');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.pageX + 'px';
+            cursor.style.top = e.pageY + 'px';
+            lightTrail.style.left = e.pageX + 'px';
+            lightTrail.style.top = e.pageY + 'px';
+            lightTrail.style.opacity = '1';
+        });
+
+        document.querySelectorAll('a, button, .hover-img, .dark-mode-toggle').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.classList.add('pointer');
+                lightTrail.style.opacity = '0';
+            });
+            element.addEventListener('mouseleave', () => {
+                cursor.classList.remove('pointer');
+                lightTrail.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>
